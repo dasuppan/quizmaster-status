@@ -28,11 +28,8 @@ def check_site():
         # separator=' ' prevents words from merging (e.g., "Hello</div><div>World")
         clean_text = soup.get_text(separator=' ')
 
-        # 3. Check for the string in the CLEAN text
-        # (Optional: .lower() makes it case-insensitive)
         found_string = SEARCH_STRING.lower() in clean_text.lower()
 
-        # 4. Store the result
         with open(OUTPUT_FILE, 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([datetime.now().isoformat(), target_url, found_string])
@@ -46,7 +43,6 @@ def check_site():
 
 
 def update_html(is_found, url):
-    # Determine color and text based on result
     if is_found:
         color = "#2ecc71"
         status_text = f"Ja, heute läuft Quizmaster"
@@ -56,29 +52,29 @@ def update_html(is_found, url):
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Simple HTML template
     html_content = f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Scrape Status</title>
+        <title>Quizmaster Status</title>
         <meta http-equiv="refresh" content="300"> <style>
             body {{ font-family: sans-serif; text-align: center; padding: 50px; }}
             .status {{ font-size: 48px; font-weight: bold; color: {color}; }}
             .time {{ color: #888; margin-top: 20px; }}
             .link {{ margin-top: 40px; display: block; }}
+            .credits {{ margin-top: 40px; display: block; color: #888; font-style: italic }}
         </style>
     </head>
     <body>
-        <h1>Current Status:</h1>
+        <h1>Quizmaster Status:</h1>
         <div class="status">{status_text}</div>
         <div class="time">Zuletzt überprüft: {timestamp}</div>
         <a class="link" href="{url}">Zum heutigen Programm</a>
+        <div class="credits">Von David für Marie</div>
     </body>
     </html>
     """
 
-    # Write the HTML file
     with open(HTML_FILE, 'w') as f:
         f.write(html_content)
 
